@@ -12,7 +12,14 @@
     "tabs"
   ],
   "host_permissions": [
-    "<all_urls>",
+    "*://x.com/*",
+    "*://*.x.com/*",
+    "*://twitter.com/*",
+    "*://*.twitter.com/*",
+    "*://instagram.com/*",
+    "*://*.instagram.com/*",
+    "*://facebook.com/*",
+    "*://*.facebook.com/*",
     "https://leetcode.com/*",
     "https://leetcode.cn/*"
   ],

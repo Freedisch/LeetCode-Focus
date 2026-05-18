@@ -1,10 +1,15 @@
 // background.js (Manifest V3)
 
 // ---- constants ----
-const ALLOW_RULE_ID = 100;       // higher priority allow
-const REDIRECT_RULE_ID = 1;      // redirect rule
-const REDIRECT_TARGET = "https://leetcode.com/"; // stable landing page
-const LC_REGEX = "^https?://([a-z0-9-]+\\.)?leetcode\\.(com|cn)/"; // dest URL matcher (RE2)
+const REDIRECT_TARGET = "https://leetcode.com/";
+
+const SOCIAL_MEDIA_DOMAINS = [
+  { id: 1, urlFilter: "||x.com/" },
+  { id: 2, urlFilter: "||twitter.com/" },
+  { id: 3, urlFilter: "||instagram.com/" },
+  { id: 4, urlFilter: "||facebook.com/" }
+];
+const SOCIAL_RULE_IDS = SOCIAL_MEDIA_DOMAINS.map((d) => d.id);
 
 const defaultSettings = {
   dailyTarget: 1,
@@ -50,36 +55,20 @@ async function updateBlockRule() {
   const shouldBlock = !(quotaMet || onBreak);
 
   if (shouldBlock) {
-    // 1) Explicitly ALLOW any navigation to leetcode.com / leetcode.cn (incl. subdomains)
-    const allowRule = {
-      id: ALLOW_RULE_ID,
-      priority: 2, // higher than redirect
-      action: { type: "allow" },
-      condition: {
-        resourceTypes: ["main_frame"],
-        regexFilter: LC_REGEX
-      }
-    };
-
-    // 2) Redirect every other main-frame navigation to LeetCode root (stable)
-    const redirectRule = {
-      id: REDIRECT_RULE_ID,
+    const addRules = SOCIAL_MEDIA_DOMAINS.map(({ id, urlFilter }) => ({
+      id,
       priority: 1,
       action: { type: "redirect", redirect: { url: REDIRECT_TARGET } },
-      condition: {
-        resourceTypes: ["main_frame"],
-        urlFilter: "http" // matches http & https
-      }
-    };
+      condition: { resourceTypes: ["main_frame"], urlFilter }
+    }));
 
     await chrome.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds: [ALLOW_RULE_ID, REDIRECT_RULE_ID],
-      addRules: [allowRule, redirectRule]
+      removeRuleIds: SOCIAL_RULE_IDS,
+      addRules
     });
   } else {
-    // Remove both rules when quota met or on break
     await chrome.declarativeNetRequest.updateDynamicRules({
-      removeRuleIds: [ALLOW_RULE_ID, REDIRECT_RULE_ID]
+      removeRuleIds: SOCIAL_RULE_IDS
     });
   }
 
