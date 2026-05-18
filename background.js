@@ -7,7 +7,8 @@ const SOCIAL_MEDIA_DOMAINS = [
   { id: 1, urlFilter: "||x.com/" },
   { id: 2, urlFilter: "||twitter.com/" },
   { id: 3, urlFilter: "||instagram.com/" },
-  { id: 4, urlFilter: "||facebook.com/" }
+  { id: 4, urlFilter: "||facebook.com/" },
+  { id: 5, urlFilter: "||tiktok.com/" }
 ];
 const SOCIAL_RULE_IDS = SOCIAL_MEDIA_DOMAINS.map((d) => d.id);
 

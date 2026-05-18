@@ -20,6 +20,8 @@
     "*://*.instagram.com/*",
     "*://facebook.com/*",
     "*://*.facebook.com/*",
+    "*://tiktok.com/*",
+    "*://*.tiktok.com/*",
     "https://leetcode.com/*",
     "https://leetcode.cn/*"
   ],
